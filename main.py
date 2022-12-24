@@ -1,6 +1,7 @@
 import os
 import subprocess
 import time
+from datetime import datetime, timedelta
 
 # Set the path to the file that you want to commit
 file_path = "file.txt"
@@ -15,7 +16,9 @@ current_date = start_date
 end_date = time.strftime("%Y-%m-%d")
 
 # Calculate the number of days between the start and end dates
-num_days = (time.strptime(end_date, "%Y-%m-%d") - time.strptime(start_date, "%Y-%m-%d")).days + 1
+start_datetime = datetime.strptime(start_date, "%Y-%m-%d")
+end_datetime = datetime.strptime(end_date, "%Y-%m-%d")
+num_days = (end_datetime - start_datetime).days + 1
 
 for i in range(num_days):
     # Set the commit message
@@ -36,7 +39,10 @@ for i in range(num_days):
     subprocess.run(["git", "commit", "-m", commit_message])
 
     # Push the commit to GitHub
+    time.sleep(2)
     subprocess.run(["git", "push"])
 
     # Increment the current date by one day
-    current_date = time.strftime("%Y-%m-%d", time.strptime(current_date, "%Y-%m-%d") + time.timedelta(days=1))
+    current_datetime = datetime.strptime(current_date, "%Y-%m-%d")
+    current_datetime += timedelta(days=1)
+    current_date = current_datetime.strftime("%Y-%m-%d")
